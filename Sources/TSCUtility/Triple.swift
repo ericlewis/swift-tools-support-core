@@ -45,6 +45,8 @@ public struct Triple: Encodable, Equatable {
         case aarch64
         case amd64
         case armv7
+        case thumbv7m
+        case thumbv7em
         case arm
         case arm64
         case arm64e
@@ -63,11 +65,13 @@ public struct Triple: Encodable, Equatable {
         case windows
         case wasi
         case openbsd
+        case none
     }
 
     public enum ABI: String, Encodable {
         case unknown
         case android
+        case eabi
     }
 
     public init(_ string: String) throws {
@@ -195,7 +199,7 @@ extension Triple {
         switch os {
         case .darwin, .macOS:
             return ".dylib"
-        case .linux, .openbsd:
+        case .linux, .openbsd, .none:
             return ".so"
         case .windows:
             return ".dll"
@@ -209,6 +213,8 @@ extension Triple {
       case .darwin, .macOS:
         return ""
       case .linux, .openbsd:
+        return ""
+      case .none:
         return ""
       case .wasi:
         return ".wasm"
